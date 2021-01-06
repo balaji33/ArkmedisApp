@@ -1,15 +1,29 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity } from 'react-native';
 
-const CourseCategories= props => {
+import { CATEGORIES } from '../courseData/CourseCategoriesData';
+import CategoriesCourseGrids from '../components/CategoriesCourseGrids';
+
+const CourseCategories = props => {
+    const renderGridItem = itemData => {
+        return <CategoriesCourseGrids 
+            title={itemData.item.title} 
+            color={itemData.item.color}
+            image={itemData.item.image}
+            onSelect={() => {
+                props.navigation.navigate({routeName: 'CategoryScreen', 
+                params: {
+                categoryId: itemData.item.id
+            } });
+        }}/>;
+    }
     return (
-        <View style={styles.screen}>
-            <Text>Courses</Text>
-            <Button title="go to courses" onPress={() => {
-                props.navigation.navigate({routeName: 'CategoryScreen'});
-            }} /> 
-        </View>
-    )
+        <FlatList 
+        keyExtractor={(item, index) => item.id}
+        data={ CATEGORIES } 
+        renderItem={renderGridItem} 
+        numColumns={3}/>
+    );
 };
 
 const styles = StyleSheet.create({
@@ -19,5 +33,6 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     }
 });
+
 
 export default CourseCategories;
